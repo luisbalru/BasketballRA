@@ -6,6 +6,7 @@
 
 library(arules)
 library(ggplot2)
+library(dplyr)
 
 binwd = function(data){
   size = length(data)
@@ -53,10 +54,10 @@ ggplot(data=data, aes(x=data$points)) + geom_histogram(binwidth=binwd(data$point
 
 ############################################################################
 # PRIMERA APROXIMACIÓN
-data[["heightInteger"]] = ordered(cut(data[["heightInteger"]], c(160,175,182,190,198,203)), labels = c("Muy bajos", "Bajos", "Media altura", "Altos", "Muy altos"))
-data[["assists"]] = ordered(cut(data[["assists"]], c(1.976,3.5,5.7,7.2,9,13.748), labels = c("Mal asistente","Poco asistente", "Asistente medio", "Gran asistente", "Pasador nato")))
-data[["ageInteger"]] = ordered(cut(data[["ageInteger"]], c(22,25,29,32,34,37), labels = c("Rookie", "Sophomore", "Senior","Experimentado", "Coach")))
-data[["time_playedReal"]] = ordered(cut(data[["time_playedReal"]], c(10.08, 16.50, 22.30,27.90,34.00,40.71), labels = c("Recambio", "Suplente", "Sexto hombre", "Titular", "Estrella")))
+data[["heightInteger"]] = ordered(cut(data[["heightInteger"]], c(159,175,182,190,198,203)), labels = c("Muy bajos", "Bajos", "Media altura", "Altos", "Muy altos"))
+data[["assists"]] = ordered(cut(data[["assists"]], c(1.97,3.5,5.7,7.2,9,13.8), labels = c("Mal asistente","Poco asistente", "Asistente medio", "Gran asistente", "Pasador nato")))
+data[["ageInteger"]] = ordered(cut(data[["ageInteger"]], c(21,25,29,32,34,37), labels = c("Rookie", "Sophomore", "Senior","Experimentado", "Coach")))
+data[["time_playedReal"]] = ordered(cut(data[["time_playedReal"]], c(10, 16.50, 22.30,27.90,34.00,41), labels = c("Recambio", "Suplente", "Sexto hombre", "Titular", "Estrella")))
 data[["points"]] = ordered(cut(data[["points"]], c(6,12,15,22,27,34), labels = c("Baja anotación", "Discreto", "Anotador", "Determinante", "Amo del parqué")))
 
 data1 = as(data,"transactions")
@@ -82,3 +83,60 @@ summary(reglas1)
 inspect(head(reglas1))
 quality(head(reglas1))
 
+
+##############################################################
+# REGLAS DE ALTURA
+
+# Estudio los Muy Bajos
+muybajos = data %>% filter(heightInteger == "Muy bajos")
+muybajos$heightInteger = NULL
+muybajosT = as(muybajos,"transactions")
+summary(muybajosT)
+itemFrequencyPlot(muybajosT, support = 0.1, cex.names=0.8)
+
+imuybajos <- apriori(muybajosT, parameter = list(support = 0.1, target="frequent"))
+imuybajos <- sort(imuybajos, by="support") # Los ordenamos por el valor del soporte
+inspect(head(imuybajos, n=10)) # Inspeccionamos los 10 primeros
+
+rules_muybajos <- apriori(muybajosT, parameter = list(support = 0.1, confidence = 0.8, minlen = 2))
+summary(rules_muybajos)
+inspect(head(rules_muybajos))
+quality(head(rules_muybajos))
+
+# Estudo Media Altura
+media.altura = data %>% filter(heightInteger == "Media altura")
+media.altura$heightInteger = NULL
+media.alturaT = as(media.altura,"transactions")
+summary(media.alturaT)
+itemFrequencyPlot(media.alturaT, support = 0.1, cex.names = 0.8)
+
+imedia.altura = apriori(media.alturaT, parameter = list(support=0.1, target = "frequent"))
+imedia.altura = sort(imedia.altura,by="support")
+inspect(head(imedia.altura,n=10))
+
+rules_media.altura = apriori(media.alturaT, parameter = list(support = 0.1, confidence = 0.8, minlen = 2))
+summary(rules_media.altura)
+inspect(head(rules_media.altura))
+quality(head(rules_media.altura))
+
+# Estudio Muy altos
+muyaltos = data %>% filter(heightInteger == "Muy alto")
+
+##############################################################
+# REGLAS DE ANOTACIÓN
+
+# Estudio Baja Anotación
+baja.anotacion = data %>% filter(points == "Baja anotación")
+baja.anotacion$points = NULL
+banotT = as(baja.anotacion,"transactions")
+summary(banotT)
+itemFrequencyPlot(banotT, support = 0.1, cex.names = 0.8)
+
+ibanot = apriori(banotT, parameter = list(support=0.1, target = "frequent"))
+ibanot = sort(ibanot,by = "support")
+inspect(head(ibanot,n=10))
+
+rules_ibanot = apriori(banotT, parameter = list(support = 0.1, confidence = 0.8, minlen = 2))
+summary(rules_ibanot)
+inspect(head(rules_ibanot))
+quality(head(rules_ibanot))
