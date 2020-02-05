@@ -151,3 +151,25 @@ itemFrequencyPlot(determinanteT, support = 0.1, cex.names = 0.8)
 ideterm = apriori(determinanteT, parameter = list(support = 0.1, confidence = 0.8, minlen = 2))
 ideterm = sort(ideterm, by = "support")
 inspect(head(ideterm, n=10))
+
+############################################################
+# REGLAS DE EDAD
+
+
+
+
+
+
+############################################################
+# REGLAS DE MINUTOS
+
+
+
+
+
+
+
+
+
+###########################################################
+# REGLAS DE ASISTENCIAS
