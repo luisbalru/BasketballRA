@@ -140,3 +140,14 @@ rules_ibanot = apriori(banotT, parameter = list(support = 0.1, confidence = 0.8,
 summary(rules_ibanot)
 inspect(head(rules_ibanot))
 quality(head(rules_ibanot))
+
+# Estudio determinante
+determinante = data %>% filter(points == "Determinante")
+determinante$points = NULL
+determinanteT = as(determinante,"transactions")
+summary(determinanteT)
+itemFrequencyPlot(determinanteT, support = 0.1, cex.names = 0.8)
+
+ideterm = apriori(determinanteT, parameter = list(support = 0.1, confidence = 0.8, minlen = 2))
+ideterm = sort(ideterm, by = "support")
+inspect(head(ideterm, n=10))
