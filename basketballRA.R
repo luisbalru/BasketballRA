@@ -148,18 +148,57 @@ determinanteT = as(determinante,"transactions")
 summary(determinanteT)
 itemFrequencyPlot(determinanteT, support = 0.1, cex.names = 0.8)
 
-ideterm = apriori(determinanteT, parameter = list(support = 0.1, confidence = 0.8, minlen = 2))
-ideterm = sort(ideterm, by = "support")
-inspect(head(ideterm, n=10))
+idetermt = apriori(determinanteT, parameter = list(support = 0.1,  target = "frequent"))
+idetermt = sort(idetermt, by = "support")
+inspect(head(idetermt, n=10))
 
+rules_idetermt = apriori(determinanteT, parameter = list(support = 0.1, confidence = 0.8, minlen=2))
+summary(rules_idetermt)
+inspect(head(rules_idetermt))
+quality(head(rules_idetermt))
 ############################################################
 # REGLAS DE EDAD
 
+# Estudio Coach
+coach = data %>% filter(ageInteger == "Coach")
+coach$ageInteger = NULL
+coachT = as(coach, "transactions")
+summary(coachT)
+itemFrequencyPlot(coachT, support = 0.1, cex.names = 0.8)
 
 
+# Estudio Rookie
+rookies = data %>% filter(ageInteger == "Rookie")
+rookies$ageInteger = NULL
+rookT = as(rookies,"transactions")
+summary(rookT)
+itemFrequencyPlot(rookT, support = 0.1, cex.names = 0.8)
 
+irook = apriori(rookT, parameter = list(support = 0.1,  target = "frequent"))
+irook = sort(irook, by = "support")
+inspect(head(irook, n=10))
 
+rules_irook = apriori(rookT, parameter = list(support = 0.1, confidence = 0.8, minlen=2))
+summary(rules_irook)
+inspect(head(rules_irook))
+quality(head(rules_irook))
 
+# Estudio Sophomore
+
+soph = data %>% filter(ageInteger == "Sophomore")
+soph$ageInteger = NULL
+sophT = as(soph, "transactions")
+summary(sophT)
+itemFrequencyPlot(sophT, support = 0.1, cex.names = 0.8)
+
+isoph = apriori(sophT, parameter = list(support = 0.1,  target = "frequent"))
+isoph = sort(isoph, by = "support")
+inspect(head(isoph, n=10))
+
+rules_soph = apriori(sophT, parameter = list(support = 0.1, confidence = 0.8, minlen=2))
+summary(rules_soph)
+inspect(head(rules_soph))
+quality(head(rules_soph))
 ############################################################
 # REGLAS DE MINUTOS
 
