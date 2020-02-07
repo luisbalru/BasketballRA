@@ -202,13 +202,70 @@ quality(head(rules_soph))
 ############################################################
 # REGLAS DE MINUTOS
 
+# Estudio Recambio
+rec = data %>% filter(time_playedReal == "Recambio")
+rec$time_playedReal = NULL
+recT = as(rec,"transactions")
+summary(recT)
+itemFrequencyPlot(recT, support = 0.1, cex.names = 0.8)
 
+irec = apriori(recT, parameter = list(support = 0.1,  target = "frequent"))
+irec = sort(irec, by="support")
+inspect(head(irec, n =10))
 
+rules_rec = apriori(recT, parameter = list(support = 0.1, confidence = 0.8, minlen=2))
+summary(rules_rec)
+inspect(head(rules_rec, n=15))
+quality(head(rules_rec))
 
+# Estudio Sexto hombre
+sh = data %>% filter(time_playedReal == "Sexto hombre")
+sh$time_playedReal = NULL
+shT = as(sh, "transactions")
+summary(shT)
+itemFrequencyPlot(shT, support = 0.1, cex.names = 0.8)
 
+ish = apriori(shT, parameter = list(support = 0.1,  target = "frequent"))
+ish = sort(ish, by="support")
+inspect(head(ish, n =10))
 
-
-
+rules_sh = apriori(shT, parameter = list(support = 0.1, confidence = 0.8, minlen=2))
+summary(rules_sh)
+inspect(head(rules_sh, n=15))
+quality(head(rules_sh))
 
 ###########################################################
 # REGLAS DE ASISTENCIAS
+
+# Pasador nato
+pn = data %>% filter(assists == "Pasador nato")
+pn$assists = NULL
+pnT = as (pn, "transactions")
+summary(pnT)
+itemFrequencyPlot(pnT, support = 0.1, cex.names = 0.8)
+
+ipn = apriori(pnT, parameter = list(support = 0.1,  target = "frequent"))
+ipn = sort(ipn, by="support")
+inspect(head(ipn, n =10))
+
+rules_pn = apriori(pnT, parameter = list(support = 0.1, confidence = 0.8, minlen=2))
+summary(rules_pn)
+inspect(head(rules_pn, n=15))
+quality(head(rules_pn))
+
+# Poco asistente
+
+pa = data %>% filter(assists == "Poco asistente")
+pa$assists = NULL
+paT = as(pa, "transactions")
+summary(paT)
+itemFrequencyPlot(paT, support = 0.1, cex.names = 0.8)
+
+ipa = apriori(paT, parameter = list(support = 0.1,  target = "frequent"))
+ipa = sort(ipa, by="support")
+inspect(head(ipa, n =10))
+
+rules_pa = apriori(paT, parameter = list(support = 0.1, confidence = 0.8, minlen=2))
+summary(rules_pa)
+inspect(head(rules_pa, n=15))
+quality(head(rules_pa))
