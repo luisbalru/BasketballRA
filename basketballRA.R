@@ -285,3 +285,74 @@ data$points_per_minuteReal = NULL
 library(RKEEL)
 algoritmo = MOPNAR_A(data)
 algoritmo$run()
+algoritmo$sortBy("support")
+algoritmo$showRules(15)
+
+
+#######################################################################################
+# TERCERA APROXIMACIÓN: DIVISIÓN EN RECUBRIMIENTO (NO PARTICIÓN) E ITEMS NEGADOS
+
+# Lectura de datos
+data = read.csv('./data/basketball.csv')
+basket = data
+data$assists = data$assists_per_minuteReal * 40
+data$points = data$points_per_minuteReal * 40
+data$assists_per_minuteReal = NULL
+data$points_per_minuteReal = NULL
+
+# Altura: Bajos (159,183), media altura(178,190), altos(186,197) y muy altos(195,203)
+alt_bajo = ifelse(data$heightInteger >= 159 & data$heightInteger <= 183, "Si","No")
+alt_ma = ifelse(data$heightInteger >= 178 & data$heightInteger <= 190, "Si", "No")
+alt_a = ifelse(data$heightInteger >= 186 & data$heightInteger<=197, "Si", "No")
+alt_muya = ifelse(data$heightInteger >= 195 & data$heightInteger <= 203, "Si", "No")
+# Asistencias: Baja asistencia(1,4), Asistencia media(3,6), Asistencia alta(4.6,10), Pasador nato(8,14)
+asist_ba = ifelse(data$assists>=1 & data$assists<=4, "Si","No")
+asist_am = ifelse(data$assists>=3 & data$assists<=6, "Si","No")
+asist_aa = ifelse(data$assists>=4.6 & data$assists<=10, "Si","No")
+asist_pn = ifelse(data$assists>=8 & data$assists<=14, "Si","No")
+# Edad: Rookie(20,25), Sophomore(23,26), Experimentado(24,32), Veterano(28,41)
+edad_r = ifelse(data$ageInteger>=20 & data$ageInteger<=25,"Si", "No")
+edad_s = ifelse(data$ageInteger>=23 & data$ageInteger<=26,"Si", "No")
+edad_e = ifelse(data$ageInteger>=24 & data$ageInteger<=32,"Si", "No")
+edad_v = ifelse(data$ageInteger>=28 & data$ageInteger<=41,"Si", "No")
+# Tiempo: Suplente(10,19), Sexto hombre(15,27), titular(28,35), estrella(32,41)
+temp_s = ifelse(data$time_playedReal>=10 & data$time_playedReal<=19, "Si", "No")
+temp_sh = ifelse(data$time_playedReal>=15 & data$time_playedReal<=27, "Si", "No")
+temp_t = ifelse(data$time_playedReal>=28 & data$time_playedReal<=35, "Si", "No")
+temp_e = ifelse(data$time_playedReal>=32 & data$time_playedReal<=41, "Si", "No")
+# Puntos: Baja anotación(6,10), Anotación media(8,17), Protagonista(15,26), Amo del Parqué(22.34)
+punt_ba = ifelse(data$points >=6 & data$points<=10,"Si", "No")
+punt_am = ifelse(data$points >=8 & data$points<=17,"Si", "No")
+punt_p = ifelse(data$points >=15 & data$points<=26,"Si", "No")
+punt_ap = ifelse(data$points >=22 & data$points<=34,"Si", "No")
+
+data.ta = data.frame("Altura: Bajo" = c(alt_bajo), "Altura: Media"=c(alt_ma), "Altura: Alto" = c(alt_a), "Altura: Muy alto"=c(alt_muya),
+                        "Asistencias: Baja asistencia" = c(asist_ba), "Asistencias: Media" = c(asist_am), "Asistencias: Alta" = c(asist_aa),
+                        "Asistencias: Pasador nato" = c(asist_pn), "Edad: Rookie" = c(edad_r), "Edad: Sophomore" = c(edad_s), "Edad: Experimentado" = c(edad_e),
+                        "Edad: Veterano" = c(edad_v), "Tiempo: Suplente"= c(temp_s), "Tiempo: Sexto hombre" = c(temp_sh), "Tiempo: Titular" = c(temp_t),
+                        "Tiempo: Estrella"= c(temp_e), "Puntos: Baja anotación"= c(punt_ba), "Puntos: Anotación media" = c(punt_am), "Puntos: Protagonista" = c(punt_p),
+                        "Puntos: Amo del parqué" = c(punt_ap))
+
+
+data.ta.t = as(data.ta,"transactions")
+summary(data.ta.t)
+image(data.ta.t)
+
+# Items más importantes
+itemFrequencyPlot(data.ta.t, support = 0.1, cex.names=0.8)
+
+# Extraigo los itemsets frecuentes con Apriori
+if_data.ta = apriori(data.ta.t, maxtime = 20,parameter = list(support=0.01, target="frequent"))
+if_data.ta = sort(if_data.ta, by = "support")
+inspect(head(if_data.ta,n=10))
+
+cerrados_data.ta = if_data.ta[is.closed(if_data.ta)]
+maximales_data.ta = if_data.ta[is.maximal(if_data.ta)]
+
+barplot( c(frequent=length(if_data.ta), closed=length(cerrados_data.ta), maximal=length(maximales_data.ta)), ylab="count", xlab="itemsets")
+
+# Extracción de reglas con Apriori
+reglas.ta = apriori(data.ta.t, parameter=list(support=0.1, confidence = 0.5, minlen=2))
+summary(reglas.ta)
+inspect(head(reglas.ta))
+quality(head(reglas.ta))
