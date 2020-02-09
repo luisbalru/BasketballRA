@@ -269,3 +269,19 @@ rules_pa = apriori(paT, parameter = list(support = 0.1, confidence = 0.8, minlen
 summary(rules_pa)
 inspect(head(rules_pa, n=15))
 quality(head(rules_pa))
+
+
+#######################################################################################
+# SEGUNDA APROXIMACIÓN: MOPNAR
+
+# Lectura de datos
+data = read.csv('./data/basketball.csv')
+basket = data
+data$assists = data$assists_per_minuteReal * 40
+data$points = data$points_per_minuteReal * 40
+data$assists_per_minuteReal = NULL
+data$points_per_minuteReal = NULL
+
+library(RKEEL)
+algoritmo = MOPNAR_A(data)
+algoritmo$run()
