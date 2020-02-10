@@ -342,7 +342,7 @@ image(data.ta.t)
 itemFrequencyPlot(data.ta.t, support = 0.1, cex.names=0.8)
 
 # Extraigo los itemsets frecuentes con Apriori
-if_data.ta = apriori(data.ta.t, maxtime = 20,parameter = list(support=0.01, target="frequent"))
+if_data.ta = apriori(data.ta.t, ,parameter = list(support=0.01, target="frequent",maxtime = 20))
 if_data.ta = sort(if_data.ta, by = "support")
 inspect(head(if_data.ta,n=10))
 
