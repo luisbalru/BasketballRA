@@ -212,7 +212,15 @@ con soporte 0.5 y confianza 1. Encontramos de nuevo la relación entre un nivel 
  
 \section{Segunda aproximación: MOPNAR y búsqueda de reglas}
 
+Uno de los grandes problemas del enfoque clásico es encontrar partición adecuada para los valores de las características. Dicha elección puede dar lugar a unas reglas de calidad o puede arruinar el estudio. Por tanto, ayudarse de un experto en los datos en esta tarea resulta crucial y muy beneficioso. Desafortunadamente, no siempre se tiene al alcance a un experto y, tras manipulaciones de los datos, puede ser difícil interpretar el contenido de las variables. Además, la mayoría de los algoritmos generan reglas positivas y, a veces, las negativas pueden ser incluso más interesantes.  Ante esta problemática, surge el algoritmo MOPNAR-A, Multi-Objective Evolutionary Algorithm for Mining a Reduced Set of Interesting Positive and Negative Quantitive Association Rules (\cite{mopnar}). Podemos encontrar este algoritmo en la librería \textit{RKEEL}(\cite{rkeel}).
 
+De las 56 reglas que se generan, vuelvo a encontrar ideas que ya he visto en la sección anterior, lo que refrenda dichas relaciones y la forma de particionar. Por ejemplo,
+$$\{heigth=[196,201]\} \Rightarrow \{assists= NOT [6.5081,13.748]\}$$
+con soporte 0.24, confianza 0.96, lift 1.714283, convicción 11 y Yule's Q 0.9398496, lo que nos vuelve a indicar que los jugadores más altos del conjunto de datos no tienen un gran número de asistencias en su estadística. Encontramos también un mínimo de productividad de los jugadores:
+
+$$\{assists= NOT[7.520099999999999, 13.748],                                                                                                                                                                      
+points= NOT [17.3001, 33.164]\} \Rightarrow$$ $$\Rightarrow \{timeplayedReal= NOT [30.7701, 40.71]\}$$
+con soporte 0.32, confianza 1 y lift 1.587302, de forma que aquellos jugadores con menos de 7.52 asistencias y menos de 17.3 puntos no han jugado más de 30.7701 minutos. 
 
 \section{Tercera aproximación: Recubrimiento de datos, items negados y conjuntos de reglas}
 

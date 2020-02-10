@@ -294,7 +294,7 @@ library(RKEEL)
 algoritmo = MOPNAR_A(data)
 algoritmo$run()
 algoritmo$sortBy("support")
-algoritmo$showRules(15)
+algoritmo$showRules()
 
 
 #######################################################################################
