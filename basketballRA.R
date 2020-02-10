@@ -87,21 +87,21 @@ quality(head(reglas1))
 ##############################################################
 # REGLAS DE ALTURA
 
-# Estudio los Muy Bajos
-muybajos = data %>% filter(heightInteger == "Muy bajos")
-muybajos$heightInteger = NULL
-muybajosT = as(muybajos,"transactions")
-summary(muybajosT)
-itemFrequencyPlot(muybajosT, support = 0.1, cex.names=0.8)
+# Estudio los Bajos
+bajos = data %>% filter(heightInteger == "Bajos")
+bajos$heightInteger = NULL
+bajosT = as(bajos,"transactions")
+summary(bajosT)
+itemFrequencyPlot(bajosT, support = 0.1, cex.names=0.8)
 
-imuybajos <- apriori(muybajosT, parameter = list(support = 0.1, target="frequent"))
-imuybajos <- sort(imuybajos, by="support") # Los ordenamos por el valor del soporte
-inspect(head(imuybajos, n=10)) # Inspeccionamos los 10 primeros
+ibajos <- apriori(bajosT, parameter = list(support = 0.1, target="frequent"))
+ibajos <- sort(ibajos, by="support") # Los ordenamos por el valor del soporte
+inspect(head(ibajos, n=10)) # Inspeccionamos los 10 primeros
 
-rules_muybajos <- apriori(muybajosT, parameter = list(support = 0.1, confidence = 0.8, minlen = 2))
-summary(rules_muybajos)
-inspect(head(rules_muybajos))
-quality(head(rules_muybajos))
+rules_bajos <- apriori(bajosT, parameter = list(support = 0.1, confidence = 0.8, minlen = 2))
+summary(rules_bajos)
+inspect(head(rules_bajos))
+quality(head(rules_bajos))
 
 # Estudo Media Altura
 media.altura = data %>% filter(heightInteger == "Media altura")
@@ -119,7 +119,15 @@ summary(rules_media.altura)
 inspect(head(rules_media.altura))
 quality(head(rules_media.altura))
 
-# Estudio Muy altos
+media.altura.discreto = media.altura %>% filter(points == "Discreto")
+media.altura.discreto$points = NULL
+media.altura.discretoT = as(media.altura.discreto,"transactions")
+rules_media.altura.discreto = apriori(media.altura.discretoT, parameter = list(support = 0.1, confidence = 0.8, minlen = 2))
+summary(rules_media.altura.discreto)
+inspect(head(rules_media.altura.discreto))
+quality(head(rules_media.altura.discreto))
+
+# Estudio Muy altos --> no genera interés
 muyaltos = data %>% filter(heightInteger == "Muy alto")
 
 ##############################################################

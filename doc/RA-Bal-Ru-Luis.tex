@@ -2,7 +2,7 @@
 \graphicspath{ {./images/} }
 \usepackage{subcaption}
 \usepackage{hyperref}
-\usepackage{soul}
+%\usepackage{soul}
 
 
 %----------------------------------------------------------------------------------------
@@ -76,9 +76,100 @@ Presento tres aproximaciones en la búsqueda de reglas de asociación interesant
 
 \section{Primera aproximación: Partición de datos y búsqueda de reglas con Apriori}
 
+Como se ha comentado, esta primera aproximación es la tradicional, es decir, con conocimiento de un 'experto' (el mío, como jugador y aficionado de baloncesto), realizo una partición de los datos, ya que estos vienen expresados de forma numérica y los algoritmos clásicos de reglas de asociación (Apriori) necesitan de variables categóricas. Presento a continuación las distintas categorías surgidas de cada variable:
 
+\begin{table}[H]
+	\centering
+	\begin{tabular}{|c|c|c|c|c|c|}
+		\hline
+		\multicolumn{6}{|c|}{\textbf{ALTURA}}                                                         \\ \hline
+		\textbf{Rangos (cm)} & ${[}159,175{]}$ & $(175.182{]}$ & $(182,190{]}$  & $(190,198{]}$ & $(198,203{]}$ \\ \hline
+		\textbf{Categorías}  & Muy bajo      & Bajo        & Media altura & Alto        & Muy alto    \\ \hline
+	\end{tabular}
+	\caption{Tabla de transformación. Altura}
+\end{table}
 
+\begin{table}[H]
+	\centering
+	\begin{tabular}{|c|c|c|c|c|c|}
+		\hline
+		\multicolumn{6}{|c|}{\textbf{ASISTENCIAS}}                                                                                                                                                                                                                                                                                              \\ \hline
+		\textbf{Rangos (por partido)} & $[1.97,3.5]$                                             & $(3.5,5.7]$                                               & $(5.7,7.2]$                                                & $(7.2,9]$                                                 & $(9,13.8]$                                              \\ \hline
+		\textbf{Categorías}           & \begin{tabular}[c]{@{}c@{}}Mal \\ asistente\end{tabular} & \begin{tabular}[c]{@{}c@{}}Poco \\ asistente\end{tabular} & \begin{tabular}[c]{@{}c@{}}Asistente \\ medio\end{tabular} & \begin{tabular}[c]{@{}c@{}}Gran\\  asistente\end{tabular} & \begin{tabular}[c]{@{}c@{}}Pasador \\ nato\end{tabular} \\ \hline
+	\end{tabular}
+	\caption{Tabla de transformación. Asistencias}
+\end{table}
 
+\begin{table}[H]
+	\centering
+	\begin{tabular}{|c|c|c|c|c|c|}
+		\hline
+		\multicolumn{6}{|c|}{\textbf{EDAD}}                                                    \\ \hline
+		\textbf{Rangos (años)} & $[21,25]$ & $(25,29]$ & $(29,32]$ & $(32,34]$     & $(34,37]$ \\ \hline
+		\textbf{Categorías}    & Rookie    & Sophomore & Senior    & Experimentado & Coach     \\ \hline
+	\end{tabular}
+	\caption{Tabla de transformación. Edad}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{|c|c|c|c|c|c|}
+		\hline
+		\multicolumn{6}{|c|}{\textbf{TIEMPO DE JUEGO}}                                                                                                \\ \hline
+		\textbf{Rangos (en minutos)} & $[10,16.5]$ & $(16.5,22.3]$ & $(22.3,27.9]$                                          & $(27.9,34]$ & $(34,41]$ \\ \hline
+		\textbf{Categorías}          & Recambio    & Suplente      & \begin{tabular}[c]{@{}c@{}}Sexto\\ hombre\end{tabular} & Titular     & Estrella  \\ \hline
+	\end{tabular}
+	\caption{Tabla de transformación. Tiempo de juego}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{|c|c|c|c|c|c|}
+		\hline
+		\multicolumn{6}{|c|}{\textbf{PUNTUACIÓN}}                                                                                                                                        \\ \hline
+		\textbf{Rangos}     & $[6,12]$                                                 & $(15,15]$ & $(15,22]$ & $(22,27]$    & $(27,34]$                                                \\ \hline
+		\textbf{Categorías} & \begin{tabular}[c]{@{}c@{}}Baja\\ anotación\end{tabular} & Discreto  & Anotador  & Determinante & \begin{tabular}[c]{@{}c@{}}Amo\\ del parqué\end{tabular} \\ \hline
+	\end{tabular}
+	\caption{Tabla de transformación. Puntuación}
+\end{table}
+
+Con esta partición, se generan 96 transacciones cuyos itemsets más frecuentes son heightInteger=Altos (51), points=Anotador (51), ageInteger=Sophomore (36), heightInteger=Media altura (33) y assists=Poco asistente (33). Veamos el gráfico de itemsets:
+
+\begin{figure}[H] %con el [H] le obligamos a situar aquí la figura
+	\centering
+	\includegraphics[scale=1.3]{ifp.png}  %el parámetro scale permite agrandar o achicar la imagen. En el nombre de archivo puede especificar directorios
+	\caption{Gráfico de itemsets} 
+	\label{fig:ifp}
+\end{figure}
+
+El objetivo que me he planteado sobre este conjunto de datos es saber qué aportan los jugadores en el partido o, en otras palabras, por qué el entrenador los mantiene más o menos minutos en pista. Por tanto, en lo que sigue me preguntó, en cada situación, qué claves a mi juicio hacen que un jugador pueda ser determinante. Para cada variable, estudiaré subcasos que puedan ser interesantes y presento las reglas asociadas junto con sus medidas.
+
+\subsection{Reglas sobre altura}
+
+\subsubsection{Altura: Bajos}
+¿Qué hace que un jugador bajo sea importante en el equipo de baloncesto? Encontramos dos reglas que a mi juicio son interesantes:
+$$\{ageInteger = Senior\} \Rightarrow \{assists = \text{Gran asistente}\}$$
+con soporte 0.4, confianza 1 y Lift 2.5. Es decir, si un jugador es bajo y además tiene una cierta experiencia, será un gran asistente, y ese es su valor fundamental. Además, encontramos la relación recíproca con los mismos valores en las medidas:
+
+$$\{assists = \text{Gran asistente}\} \Rightarrow \{ageInteger = Senior\}$$
+por lo que parece que la experiencia en pista y la capacidad de asistencia podrían estar relacionados. 
+
+Otra buena regla podría ser la siguiente:
+$$\{time=\text{Sexto hombre}, age=Sophomore, points=Discreto\} \Rightarrow \{assistis = \text{Pasador nato}\}$$
+
+con soporte 0.2, confianza 1 y lift 5. En ella encontramos que si un jugador es bajo y sexto hombre, entrando en juego en momentos muy determinados del partido para dar refresco a los titulares, tiene cierto bagaje en la liga y anota de forma discreta, entonces es pasador nato, es decir, se centra en dar muchas asistencias y no acapara la anotación. Finalmente, si 
+
+$$\{time = Estrella, assists = Gran-asistente, points = Anotador\} \Rightarrow \{age = Senior\}$$
+
+con soporte 0.2, confianza 1 y lift 2.5, es decir, que si un jugador es una estrella del equipo, y como tal protagoniza muchas jugadas con gran nivel de asistencias y anotación, encontramos que ese jugador es senior o con bastante experiencia. 
+
+\subsubsection{Altura: Media}
+Cuando se estudia el subconjunto de jugadores con altura media, vemos que se generan 10 reglas, 9 de ellas con confianza 1, y 6 de ellas tienen en el consecuente $\{points=Anotador\}$. Por tanto, podemos ver que gran parte de los jugadores de altura media son anotadores. Si nos centramos en los que tienen una anotación discreta, encontramos alguna regla como
+$$\{Age=Rookie\} \Rightarrow \{Time = Recambio\}$$
+con soporte 0.5, confianza 1 y lift 2 (la recíproca tiene los mismos valores), de forma que si un jugador es de altura media, anotación discreta y está en sus primeros años como jugador, jugará  pocos minutos. Además,
+$$\{Time = Titular\} \Rightarrow \{Assists = Pasador-nato\}$$
+es decir, si es de altura media, anotación discreta y a pesar de ello es titular, es porque aporta al equipo valor añadido como pasador nato en asistencias. 
+ 
 \section{Segunda aproximación: MOPNAR y búsqueda de reglas}
 
 
