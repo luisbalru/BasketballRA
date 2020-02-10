@@ -169,6 +169,46 @@ $$\{Age=Rookie\} \Rightarrow \{Time = Recambio\}$$
 con soporte 0.5, confianza 1 y lift 2 (la recíproca tiene los mismos valores), de forma que si un jugador es de altura media, anotación discreta y está en sus primeros años como jugador, jugará  pocos minutos. Además,
 $$\{Time = Titular\} \Rightarrow \{Assists = Pasador-nato\}$$
 es decir, si es de altura media, anotación discreta y a pesar de ello es titular, es porque aporta al equipo valor añadido como pasador nato en asistencias. 
+
+\subsection{Reglas sobre anotación}
+
+\subsubsection{Anotación: Baja}
+La anotación es la característica más importante en un jugador por la propia naturaleza del deporte. ¿Qué puede aportar un jugador con anotación baja? ¿Qué características tendrá dicho jugador?
+
+Encontramos tres reglas, todas con el mismo valor de soporte, confianza, y con lift mayor que 1, en las que se relaciona ser Senior con poco asistente, alto y recambio. De hecho, no hay ni un jugador titular en este apartado.
+
+\subsubsection{Anotación: Determinante}
+De las 8 reglas que genera el subconjunto de anotación determinante, la mayoría tiene en el consecuente ser poco asistente. Además, podemos ver que la altura tiene que ver con la cantidad de minutos que se juega, relacionándose ser muy alto con estrella y media altura con titular. 
+
+\subsection{Reglas sobre edad}
+Hay pocos datos sobre jugadores muy experimentados. Quizá esas serían las reglas más interesantes, puesto que los deportistas suelen tener una vida profesional corta y, si siguen estando, es porque deben aportar claves. Por eso, me centro en Rookies.
+
+\subsubsection{Edad: Rookie}
+Veamos las reglas asociadas a los jugadores más jóvenes. Se aprecian reglas que tienen que indican que los jugadores más altos son poco asistentes y al contrario, los malos asistentes son altos. 
+$$\{assists = Mal-asistente\} \Rightarrow \{heigh=Altos\}$$
+$$\{heigth = Altos, time=Sexto-hombre\} \Rightarrow \{assists=Poco asistente\}$$
+
+Además, aquellos gran asistentes se relacionan con ser de media altura
+$$\{assists = Gran-asistente, points=Anotador\} \Rightarrow \{height = Media-altura\}$$
+con soporte 0.137931 y confianza 1.
+
+\subsection{Reglas sobre los minutos de juego}
+
+\subsubsection{Minutos: Recambio}
+Parece obvio pensar que si eres recambio (el nivel de minutos más reducido) se tenga poca oportunidad de aportar al juego. Sin embargo, encontramos la siguiente regla:
+
+$$\{age=Experimentado\} \Rightarrow \{points=Anotador\}$$
+con soporte 0.1176471, confianza 1 y lift 3.4, encontrándose el valor añadido claro del jugador: aprovecha muy bien sus minutos. 
+
+\subsubsection{Minutos: Sexto hombre}
+Si un jugador de recambio experimentado tenía buena anotación, un sexto hombre experimentado la tendrá con más motivo. Sin embargo, encontramos la siguiente regla curiosa:
+
+$$\{assists=Pasador-nato\} \Rightarrow \{age=Sophomore\}$$
+con soporte 0.1875, confianza 1 y lift 3.2, en lo que se relaciona el nivel más alto de asistente con los jugadores jóvenes pero con cierta experiencia. Vemos que, en general, los jugadores experimentados se centran en la anotación, quizá porque especializarse en dar asistencias requiere una mayor velocidad de manos (típica de jóvenes) y la técnica de tiro va mejorando con la experiencia. Además, encontramos las siguientes reglas:
+$$\{age=Senior\} \Rightarrow \{height=Altos\}$$
+con soporte 0.25 y confianza 1; y
+$$\{assists=Poco-asistente\} \Rightarrow \{height = Altos\}$$
+con soporte 0.5 y confianza 1. Encontramos de nuevo la relación entre un nivel bajo de asistencias y jugadores altos y, en el caso de la primera regla, los sextos hombres senior suelen ser altos, lo que muestra que existen jugadores, como es el caso de Felipe Reyes, que juegan un número reducido de minutos en el poste bajo, ya que la necesidad de vitalidad, manos y piernas ágiles se reduce entre los jugadores altos. 
  
 \section{Segunda aproximación: MOPNAR y búsqueda de reglas}
 
