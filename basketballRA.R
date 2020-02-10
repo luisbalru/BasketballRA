@@ -29,7 +29,7 @@ library(Hmisc)
 summary(data)
 hist.data.frame(data)
 
-# assist per minute
+# assist
 ggplot(data=data, aes(x=data$assists)) + geom_histogram(binwidth=binwd(data$assists),fill='blue') +
   ggtitle("Histograma de Asistencias") + labs(x="Asistencias",y="Frecuencia")
 
@@ -45,7 +45,7 @@ ggplot(data=data, aes(x=data$time_playedReal)) + geom_histogram(binwidth=binwd(d
 ggplot(data=data, aes(x=data$ageInteger)) + geom_histogram(binwidth=binwd(data$ageInteger),fill='blue') +
   ggtitle("Histograma de edad") + labs(x="Edad",y="Frecuencia")
 
-# points per minute
+# points
 ggplot(data=data, aes(x=data$points)) + geom_histogram(binwidth=binwd(data$points),fill='blue') +
   ggtitle("Histograma de puntos") + labs(x="Puntos",y="Frecuencia")
 
@@ -342,7 +342,7 @@ image(data.ta.t)
 itemFrequencyPlot(data.ta.t, support = 0.1, cex.names=0.8)
 
 # Extraigo los itemsets frecuentes con Apriori
-if_data.ta = apriori(data.ta.t, ,parameter = list(support=0.01, target="frequent",maxtime = 20))
+if_data.ta = apriori(data.ta.t, parameter = list(support=0.01, target="frequent"))
 if_data.ta = sort(if_data.ta, by = "support")
 inspect(head(if_data.ta,n=10))
 
