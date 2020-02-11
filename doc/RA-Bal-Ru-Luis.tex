@@ -224,6 +224,80 @@ con soporte 0.32, confianza 1 y lift 1.587302, de forma que aquellos jugadores c
 
 \section{Tercera aproximación: Recubrimiento de datos, items negados y conjuntos de reglas}
 
+En esta última sección propongo quedarnos a medio camino entre reglas difusas y clásicas: definir un recubrimiento (no partición), es decir, que los intervalos tengan intersección no vacía. Veamos dicho recubrimiento:
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{|c|c|c|c|c|}
+		\hline
+		\multicolumn{5}{|c|}{\textbf{ALTURA}}                                                                                  \\ \hline
+		\textbf{Rangos}     & $[159,183]$ & $[178,190]$                                            & $[186,197]$ & $[195,203]$ \\ \hline
+		\textbf{Categorías} & Bajos       & \begin{tabular}[c]{@{}c@{}}Media\\ altura\end{tabular} & Altos       & Muy altos   \\ \hline
+	\end{tabular}
+	\caption{Tabla de altura}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{|c|c|c|c|c|}
+		\hline
+		\multicolumn{5}{|c|}{\textbf{ASISTENCIAS}}                                                                                                                                                                                                                        \\ \hline
+		\textbf{Rangos}     & $[1,4]$                                                   & $[3,6]$                                                    & $[4.6,10]$                                                & $[8,14]$                                               \\ \hline
+		\textbf{Categorías} & \begin{tabular}[c]{@{}c@{}}Baja\\ asistencia\end{tabular} & \begin{tabular}[c]{@{}c@{}}Asistencia\\ media\end{tabular} & \begin{tabular}[c]{@{}c@{}}Asistencia\\ alta\end{tabular} & \begin{tabular}[c]{@{}c@{}}Pasador\\ nato\end{tabular} \\ \hline
+	\end{tabular}
+	\caption{Tabla de asistencia}
+\end{table}
+
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{|c|c|c|c|c|}
+		\hline
+		\multicolumn{5}{|c|}{\textbf{EDAD}}                                     \\ \hline
+		\textbf{Rangos}     & $[20,25]$ & $[23,26]$ & $[24,32]$     & $[28,41]$ \\ \hline
+		\textbf{Categorías} & Rookie    & Sophomore & Experimentado & Veterano  \\ \hline
+	\end{tabular}
+	\caption{Tabla de edad}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{|c|c|c|c|c|}
+		\hline
+		\multicolumn{5}{|c|}{\textbf{TIEMPO DE JUEGO}}                                                                   \\ \hline
+		\textbf{Rangos}     & $[10,19]$ & $[15,27]$                                              & $[28,35]$ & $[32,41]$ \\ \hline
+		\textbf{Categorías} & Suplente  & \begin{tabular}[c]{@{}c@{}}Sexto\\ hombre\end{tabular} & Titular   & Estrella  \\ \hline
+	\end{tabular}
+	\caption{Tabla de tiempo de juego}
+\end{table}
+
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{|c|c|c|c|c|}
+		\hline
+		\multicolumn{5}{|c|}{\textbf{PUNTUACIÓN}}                                                                                                                                                                            \\ \hline
+		\textbf{Rangos}     & $[6,10]$                                                 & $[8,17]$                                                  & $[15,26]$    & $[22,34]$                                                \\ \hline
+		\textbf{Categorías} & \begin{tabular}[c]{@{}c@{}}Baja\\ anotación\end{tabular} & \begin{tabular}[c]{@{}c@{}}Anotación\\ media\end{tabular} & Protagonista & \begin{tabular}[c]{@{}c@{}}Amo\\ del parqué\end{tabular} \\ \hline
+	\end{tabular}
+	\caption{Tabla de puntuación}
+\end{table}
+
+Se generan más de dos millones de reglas. Ajustando el nivel de soporte y confianza a 0.2 y 0.5 respectivamente, encontramos algunas reglas interesantes (medidas: soporte/confianza/lift):
+
+\begin{itemize}
+	\item \textbf{Reglas muy fuertes}
+	$$\{Asistencias..Pasador.nato=Si\} \Rightarrow \{Altura..Muy.alto=No\}$$ (0.28125,1,1.35211267605634)
+	
+	$$\{Altura..Muy.alto=Si\} \Rightarrow \{Asistencias..Pasador.nato=No\}$$ (0.260416666666667,1,1.39130434782609)
+	
+	\vspace{1cm}
+	
+	$$\{Altura..Muy.alto=Si\} \Rightarrow \{Tiempo..Suplente=No\}$$
+	()0.21875,0.84,1.13577464788732)
+	$$\{Tiempo..Suplente=Si\} \Rightarrow \{Altura..Muy.alto=No\}$$
+	(0.21875,0.84,1.13577464788732)
+\end{itemize}
 
 \newpage
 \section{Bibliografía}
