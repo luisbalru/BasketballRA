@@ -360,7 +360,9 @@ maximales_data.ta = if_data.ta[is.maximal(if_data.ta)]
 barplot( c(frequent=length(if_data.ta), closed=length(cerrados_data.ta), maximal=length(maximales_data.ta)), ylab="count", xlab="itemsets")
 
 # Extracción de reglas con Apriori
-reglas.ta = apriori(data.ta.t, parameter=list(support=0.1, confidence = 0.5, minlen=2))
+reglas.ta = apriori(data.ta.t, parameter=list(support=0.2, confidence = 0.5, minlen=2))
 summary(reglas.ta)
 inspect(head(reglas.ta))
+write.PMML(reglas.ta,"reglas-ta.pmml")
+write(reglas.ta,"reglas-ta.csv",sep=",")
 quality(head(reglas.ta))
