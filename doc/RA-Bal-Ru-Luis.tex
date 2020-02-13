@@ -294,10 +294,22 @@ Se generan más de dos millones de reglas. Ajustando el nivel de soporte y confi
 	\vspace{1cm}
 	
 	$$\{Altura..Muy.alto=Si\} \Rightarrow \{Tiempo..Suplente=No\}$$
-	()0.21875,0.84,1.13577464788732)
+	(0.21875,0.84,1.13577464788732)
 	$$\{Tiempo..Suplente=Si\} \Rightarrow \{Altura..Muy.alto=No\}$$
 	(0.21875,0.84,1.13577464788732)
+	
+	\item \textbf{Descarte de causalidad}
+	Se ha hecho complicado encontrar reglas que sean valiosas por la configuración del dataset y porque no dispongo de un algoritmo que descarte aquellas reglas que contienen en el mismo atributo en el antecedente y en el consecuente. No obstante, gracias a eso aparece la siguiente regla:
+	$$\{Asistencias..Baja.asistencia=Si\} => \{Edad..Rookie=No\}$$
+	(0.208333333333333,0.625,0.895522388059702)
+	
+	Podríamos pensar en una relación de causalidad. Sin embargo, encontramos
+	$$\{Asistencias..Pasador.nato=No\} => \{Edad..Rookie=No\}$$
+	$$\{Asistencias..Pasador.nato=No\} => \{Asistencias..Baja.asistencia=Si\}$$
+	descartando así dicha relación.
 \end{itemize}
+
+En cuanto a la búsqueda de reglas tipo $\{A \Rightarrow C \}$ (fuerte) y $\{A,B \Rightarrow \neg C \}$ con soporte bajo (excepciones) o anomalías (con la definición vista en clase), ha sido imposible encontrar ninguna. Considero que, con los distintos niveles de soporte dados (0.1 mínimo), no se dan reglas de ese estilo ya que el soporte debe ser prácticamente ínfimo. Sin embargo, al no tener un algoritmo Apriori ad hoc, no consigo descartar, como comenté antes, aquellas reglas que tienen el mismo atributo en el antecedente y en el consecuente, por lo que el número de reglas a tratar es altísimo y, si reduzco más el nivel de soporte, ni siquiera R es capaz de llevar a cabo el cálculo. El camino a seguir para encontrar reglas de ese tipo es construir un algoritmo propio, que pode reglas triviales y aligere el cómputo. Por otra parte, el conjunto de datos seleccionado es modélico, en el sentido de que no parece haber anomalías o excepciones a simple vista. Conjuntos de datos con más instancias o atributos quizá favorecerían el proceso de análisis de reglas en grupo, obteniéndose resultados de más interés y provecho.
 
 \newpage
 \section{Bibliografía}
